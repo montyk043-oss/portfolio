@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Name — Portfolio</title>
+
+<!-- FONT: Poppins -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================
+   SETTINGS — change colors and spacing here
+   ===================================================== */
+:root {
+  --black: #0b0b0b;
+  --white: #ffffff;
+  --text: #111111;
+  --grey: #7a7a7a;
+  --violet: #7b5cff;            /* divider lines and accents */
+  --pad: clamp(20px, 5vw, 80px); /* side margins */
+}
+
+/* ---------- Basics ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  color: var(--text);
+  background: var(--white);
+  overflow-x: hidden;
+}
+img { display: block; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: 1px solid var(--violet); outline-offset: 4px; }
+
+/* ---------- Shared styles ---------- */
+.section {
+  position: relative;
+  padding: clamp(90px, 12vw, 170px) var(--pad);
+  border-top: 1px solid var(--violet);
+}
+.dark { background: var(--black); color: var(--white); }
+.num {
+  position: absolute; top: 28px; right: var(--pad);
+  font-size: 12px; letter-spacing: 0.14em; font-weight: 400;
+}
+.label { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); }
+.h-xl {
+  font-size: clamp(44px, 9vw, 140px); font-weight: 200;
+  text-transform: uppercase; line-height: 0.9; letter-spacing: -0.03em;
+}
+.h-lg {
+  font-size: clamp(36px, 6vw, 96px); font-weight: 200;
+  text-transform: uppercase; line-height: 0.95; letter-spacing: -0.02em;
+}
+.italic { font-style: italic; font-weight: 200; text-transform: none; }
+.body { font-size: 15px; line-height: 1.8; max-width: 36ch; }
+.caption { margin-top: 12px; font-size: 12px; line-height: 1.5; }
+.caption b {
+  display: block; font-weight: 500; font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;
+}
+
+/* Grey placeholder box — replace with <img> */
+.ph {
+  width: 100%; height: 100%; background: #cfcfcf; color: #555;
+  display: flex; align-items: flex-end; padding: 12px;
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.dark .ph { background: #2a2a2a; color: #999; }
+
+.frame { position: relative; overflow: hidden; }
+.tilt-left { rotate: -3deg; }
+.tilt-right { rotate: 3deg; }
+.outline { outline: 1px solid var(--violet); outline-offset: 10px; }
+
+/* Fade-up when scrolled into view */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 1s ease, transform 1s ease; }
+.reveal.show { opacity: 1; transform: none; }
+
+/* ---------- Navigation ---------- */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  display: flex; justify-content: space-between;
+  padding: 20px var(--pad);
+  mix-blend-mode: difference; color: #fff;
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 400;
+}
+.nav ul { display: flex; gap: 24px; list-style: none; }
+.nav a { text-decoration: none; }
+.nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* ---------- 01 Hero ---------- */
+.hero {
+  min-height: 100vh; display: grid; place-items: center;
+  text-align: center; overflow: hidden; border-top: 0;
+}
+.hero-portrait {
+  position: absolute; top: 12%; left: 50%;
+  width: clamp(200px, 26vw, 380px); aspect-ratio: 3 / 4;
+  margin-left: calc(clamp(200px, 26vw, 380px) / -2);
+}
+.hero-title {
+  position: relative; z-index: 2; margin-top: 28vh;
+  font-size: clamp(60px, 16vw, 260px); font-weight: 200;
+  letter-spacing: -0.05em; line-height: 0.8;
+  text-transform: uppercase; mix-blend-mode: difference;
+}
+.hero-sub {
+  position: relative; z-index: 2; margin-top: 24px;
+  font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 400;
+}
+.intro { animation: intro 1.6s ease both; }
+@keyframes intro { from { opacity: 0; translate: 0 40px; } to { opacity: 1; translate: 0 0; } }
+
+/* ---------- 02 About ---------- */
+.about { display: grid; grid-template-columns: 1.1fr 1fr; gap: var(--pad); min-height: 90vh; }
+.about .body { margin-top: 48px; }
+.about-imgs { position: relative; min-height: 560px; }
+.about-1 { position: absolute; right: 0; top: 0; width: 58%; aspect-ratio: 3 / 4; }
+.about-2 { position: absolute; left: 0; bottom: 0; width: 44%; aspect-ratio: 4 / 5; }
+
+/* ---------- 03 Experience ---------- */
+.experience { display: grid; grid-template-columns: 1fr 1.4fr; gap: var(--pad); }
+.exp-img { width: min(300px, 60%); aspect-ratio: 4 / 5; margin-top: 60px; }
+.exp-list { list-style: none; }
+.exp-list li {
+  display: grid; grid-template-columns: 1.2fr 1fr 0.7fr; gap: 20px;
+  padding: 26px 0; border-top: 1px solid #e3e3e3; font-size: 13px;
+}
+.exp-list li:last-child { border-bottom: 1px solid #e3e3e3; }
+.exp-list h3 { font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+.exp-list p { grid-column: 1 / -1; color: #555; line-height: 1.7; max-width: 60ch; }
+
+/* ---------- 04 Skills ---------- */
+.skills { display: grid; grid-template-columns: 1fr 1.3fr; gap: var(--pad); align-items: start; }
+.skills-img { aspect-ratio: 3 / 4; margin-top: 48px; }
+.skill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px 40px; margin-top: 64px; }
+.skill-grid h3 {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase;
+  padding-bottom: 10px; margin-bottom: 14px; border-bottom: 1px solid var(--violet);
+}
+.skill-grid ul { list-style: none; font-size: 14px; line-height: 2; }
+
+/* ---------- 05 My work ---------- */
+.work-grid {
+  display: grid; grid-template-columns: repeat(12, 1fr);
+  gap: 64px 28px; margin-top: 80px;
+}
+.project { text-align: left; display: block; }
+.project .frame { transition: scale 0.8s ease; }
+.project:hover .frame { scale: 0.98; }
+.project:hover img { filter: grayscale(0.5); }
+.wide { grid-column: span 7; }  .wide .frame { aspect-ratio: 16 / 10; }
+.tall { grid-column: span 5; }  .tall .frame { aspect-ratio: 4 / 5; }
+.half { grid-column: span 6; }  .half .frame { aspect-ratio: 1; }
+.small { grid-column: span 4; } .small .frame { aspect-ratio: 3 / 4; }
+.push-down { margin-top: 120px; }
+
+/* ---------- 06 Typography ---------- */
+.type-section { overflow: hidden; min-height: 110vh; display: flex; flex-direction: column; justify-content: center; }
+.type-line {
+  position: relative; z-index: 2;
+  font-size: clamp(48px, 12vw, 210px); font-weight: 200;
+  text-transform: uppercase; line-height: 0.95; letter-spacing: -0.05em; white-space: nowrap;
+}
+.type-line.right { text-align: right; }
+.type-line .boxed {
+  display: inline-block; border: 1px solid var(--violet);
+  padding: 0 0.12em; font-style: italic; text-transform: none;
+}
+.type-photo { position: absolute; z-index: 1; }
+.type-photo.one { top: 8%; right: 14%; width: clamp(140px, 16vw, 240px); aspect-ratio: 3 / 4; }
+.type-photo.two { bottom: 8%; left: 10%; width: clamp(120px, 13vw, 200px); aspect-ratio: 4 / 5; }
+
+/* ---------- 07 Video slider ---------- */
+.video-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; }
+.slider-controls { display: flex; align-items: center; gap: 20px; font-size: 12px; letter-spacing: 0.14em; }
+.arrow {
+  width: 48px; height: 48px; border: 1px solid #444;
+  display: grid; place-items: center; font-size: 18px; transition: border-color 0.3s;
+}
+.arrow:hover { border-color: var(--violet); }
+.track {
+  display: flex; gap: 28px; overflow-x: auto; scrollbar-width: none;
+  margin: 64px calc(var(--pad) * -1) 0; padding: 0 var(--pad);
+  cursor: grab; user-select: none;
+}
+.track::-webkit-scrollbar { display: none; }
+.track::after { content: ""; flex: 0 0 1px; }
+.track.dragging { cursor: grabbing; }
+.slide { flex: 0 0 auto; height: clamp(240px, 44vh, 440px); display: flex; flex-direction: column; text-align: left; }
+.slide .frame { height: 100%; border: 1px solid #2a2a2a; transition: border-color 0.4s; }
+.slide:hover .frame, .slide:focus-visible .frame { border-color: var(--violet); }
+.slide .caption { color: #bbb; }
+.play-icon {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  opacity: 0; transition: opacity 0.4s;
+}
+.play-icon span {
+  width: 64px; height: 64px; border: 1px solid #fff; border-radius: 50%;
+  display: grid; place-items: center; font-size: 11px; letter-spacing: 0.1em;
+}
+.slide:hover .play-icon, .slide:focus-visible .play-icon { opacity: 1; }
+.progress { height: 1px; background: #333; margin-top: 40px; position: relative; }
+.progress-bar { position: absolute; left: 0; top: 0; height: 1px; width: 0; background: var(--violet); }
+
+/* ---------- 08 Other works ---------- */
+.others { display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px 28px; margin-top: 80px; }
+.o1 { grid-column: 1 / 6; }  .o1 .frame { aspect-ratio: 4 / 5; }
+.o2 { grid-column: 7 / 12; margin-top: 160px; } .o2 .frame { aspect-ratio: 16 / 11; }
+.o3 { grid-column: 2 / 5; }  .o3 .frame { aspect-ratio: 1; }
+.o4 { grid-column: 6 / 9; margin-top: -80px; } .o4 .frame { aspect-ratio: 3 / 4; }
+.o5 { grid-column: 9 / 13; margin-top: 60px; } .o5 .frame { aspect-ratio: 4 / 3; }
+
+/* ---------- 09 Contact ---------- */
+.contact { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--pad); align-items: center; min-height: 90vh; }
+.contact-list { margin-top: 56px; display: grid; gap: 18px; font-size: 15px; }
+.contact-list .label { display: inline-block; width: 110px; }
+.contact-list a { text-decoration: none; border-bottom: 1px solid #444; padding-bottom: 2px; }
+.contact-list a:hover { border-color: var(--violet); }
+.contact-portrait { width: min(380px, 100%); aspect-ratio: 3 / 4; justify-self: end; }
+.footer {
+  display: flex; justify-content: space-between; padding: 28px var(--pad);
+  background: var(--black); color: #777; border-top: 1px solid var(--violet);
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+}
+
+/* ---------- Popup (video and image viewer) ---------- */
+.popup {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(5, 5, 5, 0.96); color: #fff;
+  display: flex; flex-direction: column; padding: 24px var(--pad);
+}
+.popup[hidden] { display: none; }
+.popup-media { flex: 1; display: grid; place-items: center; min-height: 0; }
+.popup-media img { width: auto; max-width: 100%; max-height: 78vh; filter: none; }
+.popup-media video, .popup-media iframe {
+  width: min(1200px, 100%); max-height: 78vh; aspect-ratio: 16 / 9; border: 0; background: #000;
+}
+.popup-media .ph { width: min(900px, 90vw); height: 60vh; }
+.popup-info { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; padding-top: 20px; }
+.popup-title { font-size: 18px; }
+.popup-desc { font-size: 13px; color: #aaa; margin-top: 4px; max-width: 60ch; }
+.popup-close { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; }
+.popup-close:hover { color: var(--violet); }
+.notice { font-size: 13px; color: #aaa; text-align: center; max-width: 44ch; line-height: 1.7; }
+
+/* ---------- Tablet ---------- */
+@media (max-width: 900px) {
+  .nav ul { display: none; }
+  .about, .experience, .skills, .contact { grid-template-columns: 1fr; }
+  .about-imgs { min-height: 440px; }
+  .exp-list li { grid-template-columns: 1fr 1fr; }
+  .wide, .tall, .half, .small { grid-column: span 12; }
+  .push-down { margin-top: 0; }
+  .others > * { grid-column: span 12 !important; margin-top: 0 !important; }
+  .contact-portrait { justify-self: start; width: min(300px, 80%); }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+  .skill-grid, .exp-list li { grid-template-columns: 1fr; }
+  .type-line { white-space: normal; }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .intro { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- =====================================================
+     HOW TO ADD IMAGES
+     Replace any  <div class="ph">Label</div>
+     with         <img src="images/your-photo.jpg" alt="Description">
+     ===================================================== -->
+
+<nav class="nav">
+  <a href="#top">Your Name</a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#motion">Motion</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<main id="top">
+
+  <!-- ==================== 01 HERO ==================== -->
+  <section class="section dark hero">
+    <span class="num">01</span>
+    <div class="hero-portrait frame intro" data-speed="0.25">
+      <img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me">
+      <div class="ph">Portrait</div>
+    </div>
+    <div>
+      <h1 class="hero-title intro">Portfolio</h1>
+      <p class="hero-sub intro">Designer &amp; Creative Developer</p>
+    </div>
+  </section>
+
+  <!-- ==================== 02 ABOUT ==================== -->
+  <section class="section about" id="about">
+    <span class="num">02</span>
+    <div class="reveal">
+      <h2 class="h-lg">A little<br><span class="italic">about</span> me</h2>
+      <p class="body">
+        I'm a designer working across identity, editorial, and motion.
+        I build visual systems that feel quiet, precise, and a little unexpected.
+        Replace this with your own short biography.
+      </p>
+    </div>
+    <div class="about-imgs">
+      <div class="about-1 frame" data-speed="0.12"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+      <div class="about-2 frame tilt-left" data-speed="-0.1"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+    </div>
+  </section>
+
+  <!-- ==================== 03 EXPERIENCE ==================== -->
+  <section class="section experience">
+    <span class="num">03</span>
+    <div class="reveal">
+      <h2 class="h-lg">Work<br>experience</h2>
+      <div class="exp-img frame" data-speed="0.1"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+    </div>
+
+    <!-- Copy one <li>...</li> block to add a job -->
+    <ul class="exp-list reveal">
+      <li>
+        <h3>Studio Name</h3>
+        <span>Senior Designer</span>
+        <span class="label">2023 — Now</span>
+        <p>Led identity and campaign work for cultural and tech clients.</p>
+      </li>
+      <li>
+        <h3>Agency Name</h3>
+        <span>Designer</span>
+        <span class="label">2020 — 2023</span>
+        <p>Editorial layouts, packaging, and motion for retail brands.</p>
+      </li>
+      <li>
+        <h3>Freelance</h3>
+        <span>Designer &amp; Developer</span>
+        <span class="label">2018 — 2020</span>
+        <p>Websites and visual identities for independent businesses.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ==================== 04 SKILLS ==================== -->
+  <section class="section skills">
+    <span class="num">04</span>
+    <div class="skills-img frame" data-speed="0.1"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+    <div class="reveal">
+      <h2 class="h-lg">Skills <span class="italic">&amp;</span><br>expertise</h2>
+      <div class="skill-grid">
+        <div>
+          <h3>Design</h3>
+          <ul><li>Brand identity</li><li>Editorial layout</li><li>Typography</li><li>Art direction</li></ul>
+        </div>
+        <div>
+          <h3>Motion</h3>
+          <ul><li>After Effects</li><li>Cinema 4D</li><li>Video editing</li><li>Kinetic type</li></ul>
+        </div>
+        <div>
+          <h3>Development</h3>
+          <ul><li>HTML / CSS</li><li>JavaScript</li><li>React</li><li>Creative coding</li></ul>
+        </div>
+        <div>
+          <h3>Tools</h3>
+          <ul><li>Figma</li><li>Adobe Creative Suite</li><li>Blender</li><li>Webflow</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 05 MY WORK ==================== -->
+  <!-- Sizes: wide, tall, half, small. Add "push-down" to stagger.
+       Clicking a project opens it large, using data-title and data-desc. -->
+  <section class="section" id="work">
+    <span class="num">05</span>
+    <h2 class="h-xl reveal">My <span class="italic">work</span></h2>
+    <div class="work-grid">
+
+      <button class="project wide reveal" data-title="Project one" data-desc="Identity system for a contemporary gallery.">
+        <div class="frame"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+        <p class="caption"><b>01 — Project one</b>Identity system for a contemporary gallery.</p>
+      </button>
+
+      <button class="project tall push-down reveal" data-title="Project two" data-desc="Poster series exploring negative space.">
+        <div class="frame"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+        <p class="caption"><b>02 — Project two</b>Poster series exploring negative space.</p>
+      </button>
+
+      <button class="project small reveal" data-title="Project three" data-desc="Editorial design for an independent magazine.">
+        <div class="frame"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+        <p class="caption"><b>03 — Project three</b>Editorial design for an independent magazine.</p>
+      </button>
+
+      <button class="project half push-down reveal" data-title="Project four" data-desc="Packaging for a small-batch coffee roaster.">
+        <div class="frame"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+        <p class="caption"><b>04 — Project four</b>Packaging for a small-batch coffee roaster.</p>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- ==================== 06 TYPOGRAPHY ==================== -->
+  <section class="section type-section">
+    <span class="num">06</span>
+    <div class="type-photo one frame tilt-right" data-speed="0.2"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+    <div class="type-photo two frame tilt-left" data-speed="-0.15"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+    <p class="type-line" data-speed-x="0.18">I was</p>
+    <p class="type-line right"><span class="boxed">created</span></p>
+    <p class="type-line" data-speed-x="-0.18">to create</p>
+  </section>
+
+  <!-- ==================== 07 VIDEO SLIDER ==================== -->
+  <!-- To add a video, copy one <button class="slide"> block.
+       data-src   = your MP4 file, e.g. "videos/reel.mp4"
+       data-embed = OR a hosted embed URL (YouTube/Vimeo "embed" link)
+       style="aspect-ratio: 16/9" sets the thumbnail shape (16/9, 4/5, 9/16, 1/1...) -->
+  <section class="section dark" id="motion">
+    <span class="num">07</span>
+    <div class="video-head">
+      <h2 class="h-xl reveal">Selected<br><span class="italic">motion</span></h2>
+      <div class="slider-controls">
+        <span id="counter">01 / 01</span>
+        <button class="arrow" id="prev" aria-label="Previous video">&larr;</button>
+        <button class="arrow" id="next" aria-label="Next video">&rarr;</button>
+      </div>
+    </div>
+
+    <div class="track" id="track" tabindex="0" aria-label="Video gallery. Use arrow keys to browse.">
+
+      <button class="slide" data-src="" data-embed="" data-title="Motion study 01" data-desc="Kinetic typography loop.">
+        <div class="frame" style="aspect-ratio: 16/9">
+          <div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div>
+          <div class="play-icon"><span><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></span></div>
+        </div>
+        <p class="caption"><b>01 — Motion study 01</b>Typography</p>
+      </button>
+
+      <button class="slide" data-src="" data-embed="" data-title="Brand film" data-desc="Launch film for an identity project.">
+        <div class="frame" style="aspect-ratio: 4/5">
+          <div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div>
+          <div class="play-icon"><span><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></span></div>
+        </div>
+        <p class="caption"><b>02 — Brand film</b>Commercial</p>
+      </button>
+
+      <button class="slide" data-src="" data-embed="" data-title="Vertical piece" data-desc="Short-form social edit.">
+        <div class="frame" style="aspect-ratio: 9/16">
+          <div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div>
+          <div class="play-icon"><span><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></span></div>
+        </div>
+        <p class="caption"><b>03 — Vertical piece</b>Social</p>
+      </button>
+
+      <button class="slide" data-src="" data-embed="" data-title="Title sequence" data-desc="Opening titles for a short film.">
+        <div class="frame" style="aspect-ratio: 21/9">
+          <div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div>
+          <div class="play-icon"><span><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></span></div>
+        </div>
+        <p class="caption"><b>04 — Title sequence</b>Film</p>
+      </button>
+
+      <button class="slide" data-src="" data-embed="" data-title="3D experiment" data-desc="Material and light study.">
+        <div class="frame" style="aspect-ratio: 1/1">
+          <div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div>
+          <div class="play-icon"><span><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></span></div>
+        </div>
+        <p class="caption"><b>05 — 3D experiment</b>Experimental</p>
+      </button>
+
+      <button class="slide" data-src="" data-embed="" data-title="Showreel" data-desc="Selected work, current year.">
+        <div class="frame" style="aspect-ratio: 16/9">
+          <div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div>
+          <div class="play-icon"><span><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></span></div>
+        </div>
+        <p class="caption"><b>06 — Showreel</b>Reel</p>
+      </button>
+
+    </div>
+    <div class="progress"><div class="progress-bar" id="progress"></div></div>
+  </section>
+
+  <!-- ==================== 08 OTHER WORKS ==================== -->
+  <section class="section">
+    <span class="num">08</span>
+    <h2 class="h-lg reveal">Other <span class="italic">works</span></h2>
+    <div class="others">
+      <button class="project o1 reveal" data-title="Poster" data-desc="Screen-printed gig poster.">
+        <div class="frame tilt-left" data-speed="0.08"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+        <p class="caption"><b>Poster</b>Screen-printed gig poster.</p>
+      </button>
+      <button class="project o2 reveal" data-title="Illustration" data-desc="Ink series, personal work.">
+        <div class="frame" data-speed="-0.06"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+        <p class="caption"><b>Illustration</b>Ink series, personal work.</p>
+      </button>
+      <button class="project o3 reveal" data-title="Photograph" data-desc="35mm street study.">
+        <div class="frame" data-speed="0.1"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+        <p class="caption"><b>Photograph</b>35mm street study.</p>
+      </button>
+      <button class="project o4 reveal" data-title="Experiment" data-desc="Generative type sketch.">
+        <div class="frame tilt-right" data-speed="-0.08"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+        <p class="caption"><b>Experiment</b>Generative type sketch.</p>
+      </button>
+      <button class="project o5 reveal" data-title="Book cover" data-desc="Concept cover for a novel.">
+        <div class="frame" data-speed="0.05"><div class="ph"><img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me"></div></div>
+        <p class="caption"><b>Book cover</b>Concept cover for a novel.</p>
+      </button>
+    </div>
+  </section>
+
+  <!-- ==================== 09 CONTACT ==================== -->
+  <section class="section dark contact" id="contact">
+    <span class="num">09</span>
+    <div class="reveal">
+      <h2 class="h-xl">Work<br>with <span class="italic">me</span></h2>
+      <p class="body" style="margin-top: 40px; color: #bbb;">
+        Open to commissions, collaborations, and full-time roles. Tell me about your project.
+      </p>
+      <div class="contact-list">
+        <div><span class="label">Email</span><a href="mailto:hello@yourname.com">hello@yourname.com</a></div>
+        <div><span class="label">Instagram</span><a href="#">@yourhandle</a></div>
+        <div><span class="label">LinkedIn</span><a href="#">Your Name</a></div>
+        <div><span class="label">Behance</span><a href="#">yourname</a></div>
+      </div>
+    </div>
+    <div class="contact-portrait frame tilt-right outline" data-speed="0.12">
+      <img src="https://imgs.search.brave.com/HmbD83_FTKhFmjj9G6QfbXBGiTaJo6QdMHtSg_J19SU/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMucGV4ZWxzLmNv/bS9waG90b3MvMTcx/OTE2ODQvcGV4ZWxz/LXBob3RvLTE3MTkx/Njg0L2ZyZWUtcGhv/dG8tb2Ytd29tYW4t/d2l0aC1jdXJseS1o/YWlyLmpwZWc_Y3M9/dGlueXNyZ2ImZHBy/PTEmdz01MDA" alt="Portrait of me">
+      <div class="ph">Portrait</div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span>Your Name</span>
+  <span>© 2026</span>
+</footer>
+
+<!-- Popup used for videos and project images -->
+<div class="popup" id="popup" role="dialog" aria-modal="true" hidden>
+  <div class="popup-media" id="popup-media"></div>
+  <div class="popup-info">
+    <div>
+      <p class="popup-title" id="popup-title"></p>
+      <p class="popup-desc" id="popup-desc"></p>
+    </div>
+    <button class="popup-close" id="popup-close">Close</button>
+  </div>
+</div>
+
+<script>
+/* =====================================================
+   You don't need to edit anything below this line.
+   ===================================================== */
+
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 1. Fade-in on scroll ---------- */
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+
+/* ---------- 2. Parallax ----------
+   data-speed="0.1"    moves up/down
+   data-speed-x="0.1"  moves left/right
+   Bigger number = stronger effect. Negative = opposite direction. */
+if (!reducedMotion) {
+  const movers = document.querySelectorAll("[data-speed], [data-speed-x]");
+  let waiting = false;
+
+  function updateParallax() {
+    const strength = window.innerWidth < 700 ? 0.4 : 1; // gentler on phones
+    movers.forEach(el => {
+      const box = el.parentElement.getBoundingClientRect();
+      if (box.bottom < -200 || box.top > window.innerHeight + 200) return;
+      const distance = box.top + box.height / 2 - window.innerHeight / 2;
+      const y = -distance * (parseFloat(el.dataset.speed) || 0) * strength;
+      const x = -distance * (parseFloat(el.dataset.speedX) || 0) * strength;
+      el.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    waiting = false;
+  }
+
+  window.addEventListener("scroll", () => {
+    if (!waiting) { waiting = true; requestAnimationFrame(updateParallax); }
+  }, { passive: true });
+  window.addEventListener("resize", updateParallax);
+  updateParallax();
+}
+
+/* ---------- 3. Video slider ---------- */
+const track = document.getElementById("track");
+const slides = [...track.querySelectorAll(".slide")];
+const counter = document.getElementById("counter");
+const progress = document.getElementById("progress");
+
+function sidePadding() {
+  return parseFloat(getComputedStyle(track).paddingLeft);
+}
+
+function updateSlider() {
+  const maxScroll = track.scrollWidth - track.clientWidth;
+  progress.style.width = (maxScroll > 0 ? track.scrollLeft / maxScroll * 100 : 100) + "%";
+
+  let current = 0;
+  slides.forEach((slide, i) => {
+    if (slide.offsetLeft - sidePadding() <= track.scrollLeft + 4) current = i;
+  });
+  if (track.scrollLeft >= maxScroll - 2) current = slides.length - 1;
+
+  const pad = n => String(n).padStart(2, "0");
+  counter.textContent = pad(current + 1) + " / " + pad(slides.length);
+}
+
+function moveSlider(direction) {
+  const pos = track.scrollLeft;
+  const pad = sidePadding();
+  let target;
+  if (direction > 0) {
+    target = slides.find(s => s.offsetLeft - pad > pos + 4);
+  } else {
+    target = [...slides].reverse().find(s => s.offsetLeft - pad < pos - 4);
+  }
+  const left = target ? target.offsetLeft - pad : (direction > 0 ? track.scrollWidth : 0);
+  track.scrollTo({ left, behavior: reducedMotion ? "auto" : "smooth" });
+}
+
+document.getElementById("next").addEventListener("click", () => moveSlider(1));
+document.getElementById("prev").addEventListener("click", () => moveSlider(-1));
+track.addEventListener("scroll", updateSlider, { passive: true });
+window.addEventListener("resize", updateSlider);
+track.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") { e.preventDefault(); moveSlider(1); }
+  if (e.key === "ArrowLeft")  { e.preventDefault(); moveSlider(-1); }
+});
+
+/* Mouse dragging (touch and trackpad scroll work automatically) */
+let dragStart = null;
+let wasDragged = false;
+
+track.addEventListener("pointerdown", e => {
+  if (e.pointerType !== "mouse") return;
+  dragStart = { x: e.clientX, scroll: track.scrollLeft };
+  wasDragged = false;
+});
+window.addEventListener("pointermove", e => {
+  if (!dragStart) return;
+  const moved = e.clientX - dragStart.x;
+  if (Math.abs(moved) > 5) { wasDragged = true; track.classList.add("dragging"); }
+  track.scrollLeft = dragStart.scroll - moved;
+});
+window.addEventListener("pointerup", () => {
+  dragStart = null;
+  track.classList.remove("dragging");
+});
+track.addEventListener("dragstart", e => e.preventDefault());
+
+/* Open a video when a slide is clicked (but not after a drag) */
+slides.forEach(slide => {
+  slide.addEventListener("click", e => {
+    if (wasDragged) { e.preventDefault(); wasDragged = false; return; }
+    openVideo(slide);
+  });
+});
+
+updateSlider();
+
+/* ---------- 4. Popup ---------- */
+const popup = document.getElementById("popup");
+const popupMedia = document.getElementById("popup-media");
+const popupTitle = document.getElementById("popup-title");
+const popupDesc = document.getElementById("popup-desc");
+const closeButton = document.getElementById("popup-close");
+let openedFrom = null;
+
+function openPopup(title, desc, opener) {
+  openedFrom = opener;
+  popupTitle.textContent = title || "";
+  popupDesc.textContent = desc || "";
+  popup.hidden = false;
+  document.body.style.overflow = "hidden";
+  closeButton.focus();
+}
+
+function closePopup() {
+  const video = popupMedia.querySelector("video");
+  if (video) video.pause();
+  popupMedia.innerHTML = "";           // also stops embedded videos
+  popup.hidden = true;
+  document.body.style.overflow = "";
+  if (openedFrom) openedFrom.focus();
+}
+
+function openVideo(slide) {
+  const file = slide.dataset.src;
+  const embed = slide.dataset.embed;
+
+  if (file) {
+    // Built-in controls give play/pause, mute, and fullscreen
+    popupMedia.innerHTML = `<video controls autoplay playsinline src="${file}"></video>`;
+  } else if (embed) {
+    popupMedia.innerHTML = `<iframe src="${embed}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  } else {
+    popupMedia.innerHTML = `<p class="notice">No video added yet. Put an MP4 path in data-src or an embed link in data-embed for this slide.</p>`;
+  }
+  openPopup(slide.dataset.title, slide.dataset.desc, slide);
+}
+
+/* Projects open their image large */
+document.querySelectorAll(".project").forEach(project => {
+  project.addEventListener("click", () => {
+    const picture = project.querySelector("img, .ph").cloneNode(true);
+    popupMedia.innerHTML = "";
+    popupMedia.appendChild(picture);
+    openPopup(project.dataset.title, project.dataset.desc, project);
+  });
+});
+
+closeButton.addEventListener("click", closePopup);
+popup.addEventListener("click", e => {
+  if (e.target === popup || e.target === popupMedia) closePopup();
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !popup.hidden) closePopup();
+});
+
+/* Pause video if the user switches tabs */
+document.addEventListener("visibilitychange", () => {
+  const video = popupMedia.querySelector("video");
+  if (document.hidden && video) video.pause();
+});
+</script>
+</body>
+</html>
